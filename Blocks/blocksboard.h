@@ -22,6 +22,24 @@ public:
     QSize sizeHint() const Q_DECL_OVERRIDE;
     QSize minimunSizeHint() const Q_DECL_OVERRIDE;
 
+    static Qt::Key getLeftButton();
+    static void setLeftButton(const Qt::Key &key);
+
+    static Qt::Key getRightButton();
+    static void setRightButton(const Qt::Key &key);
+
+    static Qt::Key getDownButton();
+    static void setDownButton(const Qt::Key &key);
+
+    static Qt::Key getDropButton();
+    static void setDropButton(const Qt::Key &key);
+
+    static Qt::Key getRotateCWButton();
+    static void setRotateCWButton(const Qt::Key &key);
+
+    static Qt::Key getRotateCCWButton();
+    static void setRotateCCWButton(const Qt::Key &key);
+
 public slots:
     void start();
     void pause();
@@ -71,6 +89,13 @@ private:
     int level;
     //board array contains PieceShape enum value for each grid coordinate
     BlockShape board[BoardHeight * BoardWidth];
+
+    static Qt::Key leftButton;
+    static Qt::Key rightButton;
+    static Qt::Key downButton;
+    static Qt::Key dropButton;
+    static Qt::Key rotateCWButton;
+    static Qt::Key rotateCCWButton;
 
 
  };

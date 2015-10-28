@@ -9,11 +9,13 @@ QT       += widgets
 SOURCES += main.cpp \
     blockswindow.cpp \
     blockspiece.cpp \
-    blocksboard.cpp
+    blocksboard.cpp \
+    control.cpp
 
 HEADERS  += \
     blockswindow.h \
     blockspiece.h \
-    blocksboard.h
+    blocksboard.h \
+    control.h
 
 

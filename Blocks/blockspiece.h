@@ -9,7 +9,6 @@ class BlocksPiece
 public:
     BlocksPiece() {setShape (NoShape);}
 
-
     void setRandomShape();
     void setShape(BlockShape shape);
 

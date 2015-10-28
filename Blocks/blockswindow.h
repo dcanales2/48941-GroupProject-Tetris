@@ -9,9 +9,12 @@
 
 #include <QLCDNumber>
 #include <QLabel>
+#include <QMenuBar>
 #include <QPushButton>
 
+
 #include "blocksboard.h"
+#include "control.h"
 
 class BlocksWindow : public QWidget
 {
@@ -20,6 +23,8 @@ class BlocksWindow : public QWidget
 public:
     BlocksWindow();
 
+public slots:
+    void controllsSetup();
 
 private:
     //QLabel constructor method
@@ -40,6 +45,11 @@ private:
    QPushButton *startButton;
    QPushButton *quitButton;
    QPushButton *pauseButton;
+
+   QMenuBar * menuBar;
+   QMenu * optionsMenu;
+   QAction * submenu[1];
+   Control * control;
 
    void resizeEvent(QResizeEvent*);
 //   int heightForWidth(int) const;

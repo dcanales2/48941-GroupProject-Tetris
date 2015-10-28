@@ -4,6 +4,13 @@
 
 using namespace std;
 
+Qt::Key BlocksBoard::leftButton = Qt::Key_A;
+Qt::Key BlocksBoard::rightButton = Qt::Key_D;
+Qt::Key BlocksBoard::downButton = Qt::Key_S;
+Qt::Key BlocksBoard::dropButton = Qt::Key_Space;
+Qt::Key BlocksBoard::rotateCWButton = Qt::Key_K;
+Qt::Key BlocksBoard::rotateCCWButton = Qt::Key_J;
+
 /*******************************************************************************
  * Default constructor. Config widget and initialize gamestate. Inherits QFrame
  * @param parent widget
@@ -15,6 +22,8 @@ BlocksBoard::BlocksBoard(QWidget *parent)
     setFrameStyle(QFrame::Panel | QFrame::Sunken);//sunken panel style
     //StrongFocus ensures this widget gets Keyboard input
     setFocusPolicy(Qt::StrongFocus);
+
+
 
     //init gamestates
     isStarted = false;
@@ -194,36 +203,55 @@ void BlocksBoard::paintEvent(QPaintEvent *event)
 *******************************************************************************/
 void BlocksBoard::keyPressEvent(QKeyEvent *event)
 {
+
     //pass event to parent if gamestate has not started
     if(!isStarted || isPaused || curPiece.shape() == NoShape){
         QFrame::keyPressEvent(event);
         return;
     }
 
-    //associate keyCode with appropriate method call
-    switch(event->key()){
-    case Qt::Key_A:
+    if(event->key() == leftButton){
         tryMove(curPiece, curX - 1, curY);
-        break;
-    case Qt::Key_D:
+    }else if(event->key() == rightButton){
         tryMove(curPiece, curX + 1, curY);
-        break;
-    case Qt::Key_K:
+    }else if(event->key() == rotateCWButton){
         tryMove(curPiece.rotatedRight(), curX, curY);
-        break;
-    case Qt::Key_J:
-        tryMove(curPiece.rotatedLeft(), curX, curY);
-        break;
-    case Qt::Key_Space:
-        dropDown();
-        break;
-    case Qt::Key_S:
+    }else if(event->key() == rotateCCWButton){
+        tryMove(curPiece.rotatedRight(), curX, curY);
+    }else if(event->key() == downButton){
         oneLineDown();
-        break;
-    default:
-        //pass to parent class
+    }else if(event->key() == dropButton){
+        dropDown();
+    }else{
         QFrame::keyPressEvent(event);
     }
+
+
+
+    //associate keyCode with appropriate method call
+//    switch(event->key()){
+//    case leftButton:
+//        tryMove(curPiece, curX - 1, curY);
+//        break;
+//    case rightButton:
+//        tryMove(curPiece, curX + 1, curY);
+//        break;
+//    case rotateCWButton:
+//        tryMove(curPiece.rotatedRight(), curX, curY);
+//        break;
+//    case rotateCCWButton:
+//        tryMove(curPiece.rotatedLeft(), curX, curY);
+//        break;
+//    case dropButton:
+//        dropDown();
+//        break;
+//    case downButton:
+//        oneLineDown();
+//        break;
+//    default:
+//        //pass to parent class
+//        QFrame::keyPressEvent(event);
+//    }
 
 }
 
@@ -371,7 +399,7 @@ void BlocksBoard::removeFullLines()
     for (int i= BoardHeight -1; i >=0; --i){//for each row
         bool lineIsFull = true;//set flag
 
-        for (int j = 0; j< BoardWidth; ++j){//for eash cell in row
+        for (int j = 0; j< BoardWidth; ++j){//for each cell in row
             if (shapeAt(j,i)  == NoShape){//if cell is empty
                 lineIsFull = false;//clear flag
                 break;//break loop
@@ -383,8 +411,8 @@ void BlocksBoard::removeFullLines()
             ++numFullLines; //increment full lines
             //for each row starting at active row
             for( int k = i; k < BoardHeight - 1; ++k){
-                 //for cell in row
-                for(int j = 0; j < BoardWidth -1; ++j){
+                //for cell in row
+                for(int j = 0; j < BoardWidth ; ++j){
                     //copy row above to active row
                     shapeAt(j, k) = shapeAt(j, k + 1);
                 }
@@ -393,25 +421,26 @@ void BlocksBoard::removeFullLines()
                 shapeAt(j, BoardHeight - 1) = NoShape;//clear cell
             }
         }
-
-        if(numFullLines > 0){//if any lines are are removed
-            numLinesRemoved += numFullLines;
-            score += 10 * numFullLines;
-            if (numFullLines == 4){//if max lines removed
-                score += 60;//bonus points
-            }
-
-            //emit signals
-            emit linesRemovedChanged(numLinesRemoved);
-            emit scoreChanged(score);
-
-            timer.start(500, this);
-            isWaitingAfterLine = true;
-            curPiece.setShape(NoShape);
-            //update and redraw Board widget
-            update();
-        }
     }
+
+    if(numFullLines > 0){//if any lines are are removed
+        numLinesRemoved += numFullLines;
+        score += 10 * numFullLines;
+        if (numFullLines == 4){//if max lines removed
+            score += 60;//bonus points
+        }
+
+        //emit signals
+        emit linesRemovedChanged(numLinesRemoved);
+        emit scoreChanged(score);
+
+        timer.start(500, this);
+        isWaitingAfterLine = true;
+        curPiece.setShape(NoShape);
+        //update and redraw Board widget
+        update();
+    }
+
 }
 
 /*******************************************************************************
@@ -528,4 +557,64 @@ void BlocksBoard::drawSquare(QPainter &painter, int x, int y, BlockShape shape)
     }else{
         painter.fillRect(x , y , squareWidth(), squareHeight(), color);
     }
+}
+
+Qt::Key BlocksBoard::getRotateCCWButton()
+{
+    return rotateCCWButton;
+}
+
+void BlocksBoard::setRotateCCWButton(const Qt::Key &key)
+{
+    rotateCCWButton = key;
+}
+
+Qt::Key BlocksBoard::getRotateCWButton()
+{
+    return rotateCWButton;
+}
+
+void BlocksBoard::setRotateCWButton(const Qt::Key &key)
+{
+    rotateCWButton = key;
+}
+
+Qt::Key BlocksBoard::getDropButton()
+{
+    return dropButton;
+}
+
+void BlocksBoard::setDropButton(const Qt::Key &key)
+{
+    dropButton = key;
+}
+
+Qt::Key BlocksBoard::getDownButton()
+{
+    return downButton;
+}
+
+void BlocksBoard::setDownButton(const Qt::Key &value)
+{
+    downButton = value;
+}
+
+Qt::Key BlocksBoard::getRightButton()
+{
+    return rightButton;
+}
+
+void BlocksBoard::setRightButton(const Qt::Key &key)
+{
+    rightButton = key;
+}
+
+Qt::Key BlocksBoard::getLeftButton()
+{
+    return leftButton;
+}
+
+void BlocksBoard::setLeftButton(const Qt::Key &key)
+{
+    leftButton = key;
 }
