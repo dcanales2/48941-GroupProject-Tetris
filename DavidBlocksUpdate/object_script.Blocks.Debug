@@ -1,0 +1,14 @@
+INPUT(
+./debug\main.o
+./debug\blockswindow.o
+./debug\blockspiece.o
+./debug\blocksboard.o
+./debug\control.o
+./debug\player.o
+./debug\qrc_images.o
+./debug\moc_blockswindow.o
+./debug\moc_blocksboard.o
+./debug\moc_control.o
+./debug\moc_startwindow.o
+./debug\moc_player.o
+);

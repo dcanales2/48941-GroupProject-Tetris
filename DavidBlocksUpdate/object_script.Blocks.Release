@@ -1,0 +1,14 @@
+INPUT(
+./release\main.o
+./release\blockswindow.o
+./release\blockspiece.o
+./release\blocksboard.o
+./release\control.o
+./release\player.o
+./release\qrc_images.o
+./release\moc_blockswindow.o
+./release\moc_blocksboard.o
+./release\moc_control.o
+./release\moc_startwindow.o
+./release\moc_player.o
+);
